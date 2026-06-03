@@ -25,6 +25,7 @@ The application is instrumented using the OpenTelemetry Java agent with the foll
 - **Service Name**: `dash0-java-demo`
 - **Service Version**: `1.0.0`
 - **Service Namespace**: `demo`
+- **VCS Repository**: `https://github.com/geertjanw/simple-springboot-with-otel` (enables Agent0 code navigation)
 
 All configuration is stored in `run.sh` (which is gitignored to keep credentials safe).
 
