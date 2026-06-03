@@ -1,5 +1,6 @@
 package com.example.payment;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -11,9 +12,35 @@ import java.util.UUID;
 public class PaymentController {
 
     @PostMapping("/process")
-    public Map<String, Object> processPayment(@RequestBody Map<String, Object> paymentRequest) {
+    public ResponseEntity<Map<String, Object>> processPayment(@RequestBody Map<String, Object> paymentRequest) {
         String orderId = (String) paymentRequest.get("orderId");
-        Double amount = ((Number) paymentRequest.get("amount")).doubleValue();
+        Object amountRaw = paymentRequest.get("amount");
+
+        // Validate required fields before processing to avoid NullPointerException
+        // crashing the service. Missing or malformed fields caused silent pod crashes
+        // observed in production (Dash0 failed check: payment-service traffic drop).
+        if (orderId == null || orderId.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", "INVALID_REQUEST",
+                "message", "Missing required field: orderId"
+            ));
+        }
+        if (amountRaw == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", "INVALID_REQUEST",
+                "message", "Missing required field: amount"
+            ));
+        }
+
+        Double amount;
+        try {
+            amount = ((Number) amountRaw).doubleValue();
+        } catch (ClassCastException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                "error", "INVALID_REQUEST",
+                "message", "Field 'amount' must be a number"
+            ));
+        }
 
         // Simulate payment processing delay
         try {
@@ -37,7 +64,7 @@ public class PaymentController {
             response.put("errorMessage", "Insufficient funds or payment declined");
         }
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/health")
