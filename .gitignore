@@ -24,6 +24,7 @@ Thumbs.db
 
 # Environment and credentials
 run.sh
+run-*.sh
 *.env
 .env.local
 
