@@ -21,4 +21,15 @@ service:
                   branch: main
               skipResourceVersioning: false
               enableDeclarativeRollback: false
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: ACME_Docker_Connector
+                imagePath: geertjanwielenga1/springboot-otel-demo
+                tag: <+input>
+                digest: ""
+              identifier: springboototeldemo
+              type: DockerRegistry
     type: Kubernetes
