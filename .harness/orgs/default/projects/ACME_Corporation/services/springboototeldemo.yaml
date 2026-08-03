@@ -19,6 +19,8 @@ service:
                     - manifests
                   repoName: simple-springboot-with-otel
                   branch: main
+              valuesPaths:
+                - manifests/values.yaml
               skipResourceVersioning: false
               enableDeclarativeRollback: false
       artifacts:
