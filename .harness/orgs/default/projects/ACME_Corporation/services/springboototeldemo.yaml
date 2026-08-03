@@ -3,3 +3,22 @@ service:
   identifier: springboototeldemo
   orgIdentifier: default
   projectIdentifier: ACME_Corporation
+  serviceDefinition:
+    spec:
+      manifests:
+        - manifest:
+            identifier: springboototelmanifests
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: ACME_GitHub_Connector
+                  gitFetchType: Branch
+                  paths:
+                    - manifests
+                  repoName: simple-springboot-with-otel
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+    type: Kubernetes
