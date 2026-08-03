@@ -1,0 +1,5 @@
+service:
+  name: springboot-otel-demo
+  identifier: springboototeldemo
+  orgIdentifier: default
+  projectIdentifier: ACME_Corporation
